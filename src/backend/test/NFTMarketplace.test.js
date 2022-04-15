@@ -136,6 +136,12 @@ describe("NFTMarketplace",function(){
             await expect(
                 marketplace.connect(addr2).purchaseItem(1, { value : toWei(price)})
             ).to.be.revertedWith("not enough ether to cover item price and market fee");
+            //addr2 purchase item
+            await marketplace.connect(addr2).purchaseItem(1, { value : totalPriceInWei})
+            //deployer tries purchasing item 1 after its been sold
+            await expect(
+                marketplace.connect(deployer).purchaseItem(1 , { value : totalPriceInWei})
+            ).to.be.revertedWith("item already sold");
         });
     })
 
